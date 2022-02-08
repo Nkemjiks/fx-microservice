@@ -5,3 +5,16 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+30.times do |c|
+  Customer.create!(name: ::Faker::Company.name)
+end
+
+currencies = ActiveSupport::JSON.decode(File.read("db/currencies.json"))
+
+currencies.each do |currency|
+  Currency.create!(
+    name: currency['name'],
+    code: currency['code'],
+    symbol: currency['symbol']
+  )
+end
