@@ -13,7 +13,6 @@ class TransactionsController < ApplicationController
       input_currency: @input_currency,
       output_currency: @output_currency,
       input_amount: transaction_params[:input_amount],
-      output_amount: transaction_params[:output_amount]
     )
     render json: ::TransactionResource.new(transaction: transaction, base_url: request.base_url)
   rescue StandardError => error
@@ -34,8 +33,7 @@ class TransactionsController < ApplicationController
   def transaction_params
     params.require(:transaction).permit(
       :customer_id,
-      :input_amount,
-      :output_amount
+      :input_amount
     )
   end
 
