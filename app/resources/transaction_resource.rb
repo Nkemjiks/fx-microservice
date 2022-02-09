@@ -27,7 +27,7 @@ class TransactionResource
   end
 
   def links
-    [self_link]
+    [self_link, update_link]
   end
 
   def self_link
@@ -35,6 +35,14 @@ class TransactionResource
       href: transaction_url(transaction.id, host: base_url),
       rel: 'self',
       method: 'get'
+    }
+  end
+
+  def update_link
+    {
+      href: transaction_url(transaction.id, host: base_url),
+      rel: 'update',
+      method: 'put'
     }
   end
 end

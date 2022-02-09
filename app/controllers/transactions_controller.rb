@@ -1,7 +1,7 @@
 class TransactionsController < ApplicationController
   before_action :find_customer, only: [:create]
-  before_action :find_input_currency, only: [:create]
-  before_action :find_output_currency, only: [:create]
+  before_action :find_input_currency, only: [:create, :update]
+  before_action :find_output_currency, only: [:create, :update]
 
   def index
     transactions = Transaction.includes(:customer, :input_currency, :output_currency)
@@ -21,6 +21,20 @@ class TransactionsController < ApplicationController
 
   def show
     transaction = Transaction.find_by!(id: params[:id])
+    render json: ::TransactionResource.new(transaction: transaction, base_url: request.base_url)
+  rescue ActiveRecord::RecordNotFound => error
+    render json: { message: error, status: 404 }, status: 404
+  rescue StandardError => error
+    raise error
+  end
+
+  def update
+    transaction = Transaction.find_by!(id: params[:id])
+    transaction.update!(
+      input_amount: transaction_params[:input_amount],
+      input_currency: @input_currency,
+      output_currency: @output_currency,
+    )
     render json: ::TransactionResource.new(transaction: transaction, base_url: request.base_url)
   rescue ActiveRecord::RecordNotFound => error
     render json: { message: error, status: 404 }, status: 404

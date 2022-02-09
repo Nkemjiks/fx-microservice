@@ -8,7 +8,7 @@ class Transaction < ApplicationRecord
   validates_associated :customer, :input_currency, :output_currency
   validates :input_amount, presence: true, numericality: true
 
-  before_create :convert_amount
+  before_save :convert_amount
 
   def formatted_input
     number_to_currency(input_amount, unit: input_currency.symbol)
